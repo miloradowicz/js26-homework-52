@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Component } from 'react';
+import CardComp from './components/Card';
+import './App.css';
+import Card from './lib/Card';
+import CardDeck from './lib/CardDeck';
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+interface AppState {
+  hand: Card[];
 }
 
-export default App
+class App extends Component<null, AppState> {
+  private deck: CardDeck | undefined;
+  state: AppState = { hand: [] };
+
+  dealHand() {
+    try {
+      this.deck = new CardDeck();
+
+      this.setState({ hand: this.deck.getCards(5) });
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error(err.message);
+      }
+    }
+  }
+
+  render() {
+    return (
+      <>
+        <h1>Super duper poker!</h1>
+        <div className='card'>
+          <button onClick={() => this.dealHand()}>Раздать карты</button>
+          <div className='playingCards faceImages'>
+            <ul className='hand'>
+              {this.state.hand.length > 0
+                ? this.state.hand.map((x, i) => (
+                    <li>
+                      <CardComp key={i} rank={x.rank} suit={x.suit} />
+                    </li>
+                  ))
+                : ''}
+            </ul>
+          </div>
+        </div>
+      </>
+    );
+  }
+}
+
+export default App;
