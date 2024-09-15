@@ -1,14 +1,6 @@
 import React from 'react';
 import './card.css';
-
-const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'j', 'q', 'k', 'a'];
-
-const suits = {
-  diams: '♦',
-  hearts: '♥',
-  spades: '♣',
-  clubs: '♠',
-};
+import { ranks, suits } from '../shared/cards';
 
 interface Props {
   rank: string;
