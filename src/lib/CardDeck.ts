@@ -1,4 +1,4 @@
-import { ranks, suits } from '../shared/cards';
+import { ranks, ranksType, suits, suitsType } from '../shared/cards';
 import Card from './Card';
 import { randomInt } from './utils';
 
@@ -7,8 +7,8 @@ class CardDeck {
 
   constructor() {
     for (const suit in suits) {
-      for (const rank of ranks) {
-        this.deck.push(new Card(rank, suit));
+      for (const rank in ranks) {
+        this.deck.push(new Card(rank as ranksType, suit as suitsType));
       }
     }
   }
