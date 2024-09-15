@@ -18,17 +18,16 @@ class CardDeck {
       throw new Error('The deck is emplty.');
     }
 
-    return this.deck.splice(randomInt(0, this.deck.length - 1), 1)[0];
+    return this.deck.splice(randomInt(this.deck.length - 1, 0), 1)[0];
   }
 
   getCards(howMany: number) {
-    if (!Number.isInteger(howMany) || howMany <= 0 || howMany > 52) {
+    if (!Number.isInteger(howMany) || howMany <= 0 || howMany > this.deck.length) {
       throw new Error('Invalid number of cards.');
     }
 
     const hand: Card[] = [];
 
-    howMany = Math.min(howMany, this.deck.length);
     for (let i = 0; i < howMany; i++) {
       hand.push(this.getCard());
     }
