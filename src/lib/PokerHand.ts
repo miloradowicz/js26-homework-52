@@ -42,7 +42,7 @@ class PokerHand {
     let dissatisfied = false;
     let i = 0;
     while (!dissatisfied && i < hand.length - 1) {
-      if (this.getCardRankOrdinal(hand[i], order) !== this.getCardRankOrdinal(hand[i + 1], order) + 1) {
+      if (this.getCardRankOrdinal(hand[i + 1], order) !== this.getCardRankOrdinal(hand[i], order) + 1) {
         dissatisfied = true;
       }
 
