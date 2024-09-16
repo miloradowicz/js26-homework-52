@@ -30,7 +30,7 @@ class App extends Component<React.FC<{}>, AppState> {
         cards: cards.map((x) => {
           return { card: x, checked: false };
         }),
-        judgement: PokerHand.judgeHand(cards),
+        judgement: PokerHand.getOutcome(cards),
         highestCard: PokerHand.getHighestRankingCard(cards),
       });
     } catch (err) {
@@ -68,7 +68,7 @@ class App extends Component<React.FC<{}>, AppState> {
         cards: cards.map((x) => {
           return { card: x, checked: false };
         }),
-        judgement: PokerHand.judgeHand(cards),
+        judgement: PokerHand.getOutcome(cards),
         highestCard: PokerHand.getHighestRankingCard(cards),
       });
     } catch (err) {

@@ -100,23 +100,23 @@ class PokerHand {
     return hand.slice(-1)[0];
   }
 
-  static isOnePair(hand: Card[]) {
+  private static isOnePair(hand: Card[]) {
     return this.evaluateRepeatingRanks(hand) === Hand.OnePair;
   }
 
-  static isTwoPairs(hand: Card[]) {
+  private static isTwoPairs(hand: Card[]) {
     return this.evaluateRepeatingRanks(hand) === Hand.TwoPairs;
   }
 
-  static isThreeOfAKind(hand: Card[]) {
+  private static isThreeOfAKind(hand: Card[]) {
     return this.evaluateRepeatingRanks(hand) === Hand.ThreeOfAKind;
   }
 
-  static isStraight(hand: Card[]) {
+  private static isStraight(hand: Card[]) {
     return this.isStraightWithAceAsHighest(hand) || this.isStraightWithAceAsLowest(hand);
   }
 
-  static isFlush(hand: Card[]) {
+  private static isFlush(hand: Card[]) {
     let dissatisfied = false;
     let i = 0;
     while (!dissatisfied && i < hand.length - 1) {
@@ -130,19 +130,19 @@ class PokerHand {
     return !dissatisfied;
   }
 
-  static isFullHouse(hand: Card[]) {
+  private static isFullHouse(hand: Card[]) {
     return this.evaluateRepeatingRanks(hand) === Hand.FullHouse;
   }
 
-  static isFourOfAKind(hand: Card[]) {
+  private static isFourOfAKind(hand: Card[]) {
     return this.evaluateRepeatingRanks(hand) === Hand.FourOfAKind;
   }
 
-  static isStraigthFlush(hand: Card[]) {
+  private static isStraigthFlush(hand: Card[]) {
     return this.isFlush(hand) && this.isStraight(hand);
   }
 
-  static isRoyalFlush(hand: Card[]) {
+  private static isRoyalFlush(hand: Card[]) {
     return (
       this.isFlush(hand) &&
       this.isStraightWithAceAsHighest(hand) &&
@@ -150,7 +150,7 @@ class PokerHand {
     );
   }
 
-  static judgeHand(hand: Card[]) {
+  static getOutcome(hand: Card[]) {
     if (this.isRoyalFlush(hand)) {
       return Hand.RoyalFlush;
     } else if (this.isStraigthFlush(hand)) {
