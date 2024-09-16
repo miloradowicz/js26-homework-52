@@ -5,6 +5,10 @@ import { randomInt } from './utils';
 class CardDeck {
   private readonly deck: Card[] = [];
 
+  public get CardsLeft() {
+    return this.deck.length;
+  }
+
   constructor() {
     for (const suit in suits) {
       for (const rank in ranks) {

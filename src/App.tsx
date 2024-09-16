@@ -1,4 +1,4 @@
-import { Component, PropsWithChildren } from 'react';
+import { Component } from 'react';
 import CardComp from './components/Card';
 import './App.css';
 import Card from './lib/Card';
@@ -17,7 +17,7 @@ interface AppState {
   highestCard?: Card;
 }
 
-class App extends Component<PropsWithChildren, AppState> {
+class App extends Component<React.FC<{}>, AppState> {
   private deck: CardDeck | undefined;
   state: AppState = { cards: [] };
 
@@ -35,7 +35,7 @@ class App extends Component<PropsWithChildren, AppState> {
       });
     } catch (err) {
       if (err instanceof Error) {
-        alert(err.message);
+        console.error(err.message);
       }
     }
   }
@@ -49,7 +49,7 @@ class App extends Component<PropsWithChildren, AppState> {
       });
     } catch (err) {
       if (err instanceof Error) {
-        alert(err.message);
+        console.error(err.message);
       }
     }
   }
@@ -73,7 +73,7 @@ class App extends Component<PropsWithChildren, AppState> {
       });
     } catch (err) {
       if (err instanceof Error) {
-        alert(err.message);
+        console.error(err.message);
       }
     }
   }
@@ -81,14 +81,25 @@ class App extends Component<PropsWithChildren, AppState> {
   render() {
     return (
       <>
-        <h1>Super duper poker!</h1>
+        <h1>Супер-пупер Покер!</h1>
         <div className='card'>
-          <div>
-            <button onClick={() => this.dealHand()}>Раздать карты</button>
-            <button type='button' onClick={() => this.replaceCards()} disabled={!this.state.cards.some((x) => x.checked)}>
+          <div className='controls'>
+            <button type='button' className='btn deal-btn' onClick={() => this.dealHand()}>
+              Раздать карты
+            </button>
+            <button
+              type='button'
+              className='btn replace-btn'
+              onClick={() => this.replaceCards()}
+              disabled={
+                this.deck === undefined || !this.state.cards.some((x) => x.checked) || this.deck.CardsLeft < this.state.cards.filter((x) => x.checked).length
+              }
+            >
               Заменить карты
             </button>
           </div>
+          <p>{this.deck !== undefined ? `Осталось карт в колоде: ${this.deck.CardsLeft}` : 'Нажмите "Раздать карты" чтобы начать игру.'}</p>
+          <p>{this.deck?.CardsLeft === 0 ? '\nНачните новую игру' : ''}</p>
           <div className='playingCards faceImages'>
             <ul className='table'>
               {this.state.cards.length > 0
@@ -106,13 +117,13 @@ class App extends Component<PropsWithChildren, AppState> {
                 : ''}
             </ul>
           </div>
-          <span className='judgement'>
+          <p className='judgement'>
             {this.state.judgement !== undefined && this.state.highestCard !== undefined
               ? this.state.judgement === Hand.Air
                 ? 'Highest rank: ' + ranks[this.state.highestCard.rank].name
                 : this.state.judgement?.toString()
               : ''}
-          </span>
+          </p>
         </div>
       </>
     );
