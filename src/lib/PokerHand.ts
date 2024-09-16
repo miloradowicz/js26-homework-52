@@ -52,11 +52,11 @@ class PokerHand {
     return !dissatisfied;
   }
 
-  private static isBroadwayStraight(hand: Card[]) {
+  private static isStraightWithAceAsHighest(hand: Card[]) {
     return this.isRanksInOrder(hand, OrderType.Broadway);
   }
 
-  private static isBabyStraight(hand: Card[]) {
+  private static isStraightWithAceAsLowest(hand: Card[]) {
     return this.isRanksInOrder(hand, OrderType.Baby);
   }
 
@@ -113,7 +113,7 @@ class PokerHand {
   }
 
   static isStraight(hand: Card[]) {
-    return this.isBroadwayStraight(hand) || this.isBabyStraight(hand);
+    return this.isStraightWithAceAsHighest(hand) || this.isStraightWithAceAsLowest(hand);
   }
 
   static isFlush(hand: Card[]) {
@@ -145,7 +145,7 @@ class PokerHand {
   static isRoyalFlush(hand: Card[]) {
     return (
       this.isFlush(hand) &&
-      this.isStraight(hand) &&
+      this.isStraightWithAceAsHighest(hand) &&
       ranks[this.getHighestRankingCard(hand).rank].order === Math.max(...Object.values(ranks).map((x) => x.order))
     );
   }
@@ -154,7 +154,7 @@ class PokerHand {
     if (this.isRoyalFlush(hand)) {
       return Hand.RoyalFlush;
     } else if (this.isStraigthFlush(hand)) {
-      return Hand.RoyalFlush;
+      return Hand.StraightFlush;
     } else if (this.isFourOfAKind(hand)) {
       return Hand.FourOfAKind;
     } else if (this.isFullHouse(hand)) {
