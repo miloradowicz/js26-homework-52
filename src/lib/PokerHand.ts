@@ -94,7 +94,7 @@ class PokerHand {
     return result;
   }
 
-  static getHighestRankingCard(hand: Card[]) {
+  private static getHighestRankingCard(hand: Card[]) {
     hand = this.sortHand(hand, OrderType.Broadway);
 
     return hand.slice(-1)[0];
@@ -150,7 +150,7 @@ class PokerHand {
     );
   }
 
-  static getOutcome(hand: Card[]) {
+  static getOutcome(hand: Card[]): Hand | Card {
     if (this.isRoyalFlush(hand)) {
       return Hand.RoyalFlush;
     } else if (this.isStraigthFlush(hand)) {
@@ -170,7 +170,7 @@ class PokerHand {
     } else if (this.isOnePair(hand)) {
       return Hand.OnePair;
     } else {
-      return Hand.Air;
+      return this.getHighestRankingCard(hand);
     }
   }
 }

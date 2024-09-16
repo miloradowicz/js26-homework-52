@@ -13,11 +13,10 @@ interface CardState {
 
 interface AppState {
   cards: CardState[];
-  judgement?: Hand;
-  highestCard?: Card;
+  judgement?: Hand | Card;
 }
 
-class App extends Component<React.FC<{}>, AppState> {
+class App extends Component<React.FC<null>, AppState> {
   private deck: CardDeck | undefined;
   state: AppState = { cards: [] };
 
@@ -31,7 +30,6 @@ class App extends Component<React.FC<{}>, AppState> {
           return { card: x, checked: false };
         }),
         judgement: PokerHand.getOutcome(cards),
-        highestCard: PokerHand.getHighestRankingCard(cards),
       });
     } catch (err) {
       if (err instanceof Error) {
@@ -69,7 +67,6 @@ class App extends Component<React.FC<{}>, AppState> {
           return { card: x, checked: false };
         }),
         judgement: PokerHand.getOutcome(cards),
-        highestCard: PokerHand.getHighestRankingCard(cards),
       });
     } catch (err) {
       if (err instanceof Error) {
@@ -117,11 +114,11 @@ class App extends Component<React.FC<{}>, AppState> {
                 : ''}
             </ul>
           </div>
-          <p className='judgement'>
-            {this.state.judgement !== undefined && this.state.highestCard !== undefined
-              ? this.state.judgement === Hand.Air
-                ? 'Highest rank: ' + ranks[this.state.highestCard.rank].name
-                : this.state.judgement?.toString()
+          <p className='judgement clear-fix'>
+            {this.state.judgement !== undefined
+              ? this.state.judgement instanceof Card
+                ? 'Highest rank: ' + ranks[this.state.judgement.rank].name
+                : this.state.judgement.toString()
               : ''}
           </p>
         </div>
