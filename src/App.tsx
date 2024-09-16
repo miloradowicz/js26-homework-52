@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, PropsWithChildren } from 'react';
 import CardComp from './components/Card';
 import './App.css';
 import Card from './lib/Card';
@@ -6,29 +6,74 @@ import CardDeck from './lib/CardDeck';
 import PokerHand, { Hand } from './lib/PokerHand';
 import { ranks } from './shared/cards';
 
+interface CardState {
+  card: Card;
+  checked: boolean;
+}
+
 interface AppState {
-  hand: Card[];
+  cards: CardState[];
   judgement?: Hand;
   highestCard?: Card;
 }
 
-class App extends Component<null, AppState> {
+class App extends Component<PropsWithChildren, AppState> {
   private deck: CardDeck | undefined;
-  state: AppState = { hand: [] };
+  state: AppState = { cards: [] };
 
   dealHand() {
     try {
       this.deck = new CardDeck();
-      const hand = this.deck.getCards(5);
+      const cards = this.deck.getCards(5);
 
       this.setState({
-        hand: hand,
-        judgement: PokerHand.judgeHand(hand),
-        highestCard: PokerHand.getHighestRankingCard(hand),
+        cards: cards.map((x) => {
+          return { card: x, checked: false };
+        }),
+        judgement: PokerHand.judgeHand(cards),
+        highestCard: PokerHand.getHighestRankingCard(cards),
       });
     } catch (err) {
       if (err instanceof Error) {
-        console.error(err.message);
+        alert(err.message);
+      }
+    }
+  }
+
+  pickCards(i: number) {
+    try {
+      this.setState((state) => {
+        state.cards[i].checked = !state.cards[i].checked;
+
+        return state;
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        alert(err.message);
+      }
+    }
+  }
+
+  replaceCards() {
+    try {
+      if (this.deck === undefined) {
+        throw new Error('Invalid state.');
+      }
+
+      const oldCards = this.state.cards.filter((x) => !x.checked).map((x) => x.card);
+      const newCards = this.deck.getCards(this.state.cards.length - oldCards.length);
+      const cards = oldCards.concat(newCards);
+
+      this.setState({
+        cards: cards.map((x) => {
+          return { card: x, checked: false };
+        }),
+        judgement: PokerHand.judgeHand(cards),
+        highestCard: PokerHand.getHighestRankingCard(cards),
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        alert(err.message);
       }
     }
   }
@@ -38,21 +83,32 @@ class App extends Component<null, AppState> {
       <>
         <h1>Super duper poker!</h1>
         <div className='card'>
-          <button onClick={() => this.dealHand()}>Раздать карты</button>
+          <div>
+            <button onClick={() => this.dealHand()}>Раздать карты</button>
+            <button type='button' onClick={() => this.replaceCards()} disabled={!this.state.cards.some((x) => x.checked)}>
+              Заменить карты
+            </button>
+          </div>
           <div className='playingCards faceImages'>
             <ul className='table'>
-              {this.state.hand.length > 0
-                ? this.state.hand.map((x, i) => (
+              {this.state.cards.length > 0
+                ? this.state.cards.map((x, i) => (
                     <li>
-                      <CardComp key={i} rank={x.rank} suit={x.suit} />
+                      <CardComp
+                        key={`${x.card.rank}-${x.card.suit}`}
+                        rank={x.card.rank}
+                        suit={x.card.suit}
+                        checked={x.checked}
+                        onChange={() => this.pickCards(i)}
+                      />
                     </li>
                   ))
                 : ''}
             </ul>
           </div>
           <span className='judgement'>
-            {this.state.hand.length > 0
-              ? this.state.judgement === Hand.Air && this.state.highestCard !== undefined
+            {this.state.judgement !== undefined && this.state.highestCard !== undefined
+              ? this.state.judgement === Hand.Air
                 ? 'Highest rank: ' + ranks[this.state.highestCard.rank].name
                 : this.state.judgement?.toString()
               : ''}

@@ -15,7 +15,7 @@ class CardDeck {
 
   getCard() {
     if (this.deck.length < 1) {
-      throw new Error('The deck is emplty.');
+      throw new Error('The deck is empty.');
     }
 
     return this.deck.splice(randomInt(this.deck.length - 1, 0), 1)[0];

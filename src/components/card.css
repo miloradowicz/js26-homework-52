@@ -39,7 +39,7 @@
 .playingCards a.card:hover,
 .playingCards a.card:active,
 .playingCards a.card:focus,
-.playingCards label.card:hover,
+.playingCards label.card:has(input[type='checkbox']:checked),
 .playingCards strong .card {
   bottom: 1em;
 }
@@ -110,6 +110,7 @@
 
 /* checkbox */
 .playingCards .card input {
+  display: none;
   margin-top: -0.05em;
   font: inherit;
 }
