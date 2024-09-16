@@ -19,8 +19,8 @@ export type ranksType = keyof typeof ranks;
 export const suits = {
   diams: { symbol: '♦', name: 'Diamonds' },
   hearts: { symbol: '♥', name: 'Hearts' },
-  spades: { symbol: '♣', name: 'Spades' },
-  clubs: { symbol: '♠', name: 'Clubs' },
+  spades: { symbol: '♠', name: 'Spades' },
+  clubs: { symbol: '♣', name: 'Clubs' },
 };
 
 export type suitsType = keyof typeof suits;
