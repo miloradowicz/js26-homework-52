@@ -43,7 +43,7 @@ class App extends Component<React.FC<null>, AppState> {
       this.setState((state) => {
         return {
           cards: state.cards.map((x, i) => {
-            return { card: x.card, checked: i === index ? !x.checked : x.checked };
+            return i === index ? { card: x.card, checked: !x.checked } : x;
           }),
           judgement: state.judgement,
         };
