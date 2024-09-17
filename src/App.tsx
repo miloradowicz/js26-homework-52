@@ -38,12 +38,15 @@ class App extends Component<React.FC<null>, AppState> {
     }
   }
 
-  pickCards(i: number) {
+  pickCards(index: number) {
     try {
       this.setState((state) => {
-        state.cards[i].checked = !state.cards[i].checked;
-
-        return state;
+        return {
+          cards: state.cards.map((x, i) => {
+            return { card: x.card, checked: i === index ? !x.checked : x.checked };
+          }),
+          judgement: state.judgement,
+        };
       });
     } catch (err) {
       if (err instanceof Error) {
@@ -60,7 +63,7 @@ class App extends Component<React.FC<null>, AppState> {
 
       const oldCards = this.state.cards.filter((x) => !x.checked).map((x) => x.card);
       const newCards = this.deck.getCards(this.state.cards.length - oldCards.length);
-      const cards = oldCards.concat(newCards);
+      const cards = [...oldCards, ...newCards];
 
       this.setState({
         cards: cards.map((x) => {
